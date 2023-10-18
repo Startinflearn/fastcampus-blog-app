@@ -1,5 +1,12 @@
 import React from "react";
+import PostDetail from "../../component/PostDetail";
+import Header from "../../component/Header";
+import Footer from "../../component/Footer";
 
-export default function PostDetail(){
-    return <h1>Post Detail Page</h1>
+export default function PostPage() {
+    return <>
+        <Header/>
+        <PostDetail/>
+        <Footer/>
+    </>
 }

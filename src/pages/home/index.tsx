@@ -1,15 +1,11 @@
 import React from "react";
 import {Link} from "react-router-dom";
+import Header from "../../component/Header";
+import Footer from "../../component/Footer";
 export default function Home() {
     return (
         <div>
-            <header>
-                <div>
-                    <Link to="/posts/new">글쓰기</Link>
-                    <Link to="/posts">게시글</Link>
-                    <Link to="/profile">프로필</Link>
-                </div>
-            </header>
+            <Header/>
                 <div className="post__navigation">
                     <div className="post__navigation--active">전체</div>
                     <div>나의글</div>
@@ -44,11 +40,7 @@ export default function Home() {
                 ))
                 }
             </div>
-            <footer>
-                <Link to="/posts/new">글쓰기</Link>
-                <Link to="/posts">게시글</Link>
-                <Link to="/profile">프로필</Link>
-            </footer>
+            <Footer/>
         </div>
     )
 }
