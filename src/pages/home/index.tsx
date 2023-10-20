@@ -1,12 +1,13 @@
-import React from "react";
-import Header from "../../component/Header";
-import Footer from "../../component/Footer";
-import PostList from "../../component/PostList";
+import Footer from "component/Footer";
+import Header from "component/Header";
+import PostList from "component/PostList";
+import Carousel from "component/Carousel";
+
 export default function Home() {
     return (
         <div>
             <Header/>
-
+            <Carousel/>
             <PostList/>
             <Footer/>
         </div>
