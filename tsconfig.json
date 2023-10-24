@@ -22,7 +22,8 @@
     "jsx": "react-jsx",
     "paths": {
       "component/*" : ["component/*"],
-      "pages/*" : ["pages/*"]
+      "pages/*" : ["pages/*"],
+      "firebaseApp/*" : ["firebaseApp/*"]
     }
   },
   "include": ["src"]
