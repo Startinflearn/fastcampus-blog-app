@@ -1,4 +1,3 @@
-import React from 'react';
 import {
     Route,
     Routes,
@@ -13,22 +12,37 @@ import LoginPage from "../pages/login";
 import SignupPage from "../pages/signup";
 import ProfilePage from "../pages/profile";
 
-export default function Router() {
+interface RouterProps {
+    isAuthenticated : boolean;
+}
+export default function Router( { isAuthenticated } : RouterProps) {
     /*지정되지않은 페이지
     * <Route path="*" element={<Navigate replace to="/"/> }/>
     * */
+
     return (
         <>
             <Routes>
-                <Route path="/" element={<Home/>}/>
-                <Route path="/posts" element={<Posts/>}/>
-                <Route path="/posts/:id" element={<PostDetail/>}/>
-                <Route path="/posts/new" element={<PostNew/>}/>
-                <Route path="/posts/edit/:id" element={<PostEdit/>}/>
-                <Route path="/profile" element={<ProfilePage/>}/>
-                <Route path="/login" element={<LoginPage/>}/>
-                <Route path="/signup" element={<SignupPage/>}/>
-                <Route path="*" element={<Navigate replace to="/"/> }/>
+                {
+                    isAuthenticated ? (
+                        <> <Route path="/" element={<Home/>}/>
+                            <Route path="/posts" element={<Posts/>}/>
+                            <Route path="/posts/:id" element={<PostDetail/>}/>
+                            <Route path="/posts/new" element={<PostNew/>}/>
+                            <Route path="/posts/edit/:id" element={<PostEdit/>}/>
+                            <Route path="/profile" element={<ProfilePage/>}/>
+                            <Route path="/login" element={<LoginPage/>}/>
+                            <Route path="/signup" element={<SignupPage/>}/>
+                            <Route path="*" element={<Navigate replace to="/"/> }/></>
+                    ) : (
+                        <>
+                            <Route path="/login" element={<LoginPage/>}/>
+                            <Route path="/signup" element={<SignupPage/>}/>
+                            <Route path="/*" element={<LoginPage/>}/>
+                        </>
+                    )
+                }
+
             </Routes>
         </>
     )

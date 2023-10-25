@@ -1,5 +1,12 @@
 import React from "react";
+import Header from "component/Header";
+import LoginForm from "component/LoginForm";
 
 export default function LoginPage(){
-    return <h1>Login Page</h1>
+    return (
+        <>
+            <Header/>
+            <LoginForm/>
+        </>
+    )
 }
