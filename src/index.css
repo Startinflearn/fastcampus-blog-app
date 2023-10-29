@@ -415,3 +415,6 @@ input:checked + .carousel__slide-container .nav label {
 .form__link:hover {
   color: black;
 }
+.form__error {
+  color: red;
+}
