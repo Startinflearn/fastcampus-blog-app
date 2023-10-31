@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {app} from "firebaseApp";
 import {getAuth, createUserWithEmailAndPassword} from "firebase/auth";
 import {toast} from "react-toastify";
@@ -9,13 +9,15 @@ const SignupForm = () => {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("")
     const [passwordConfirm, setPasswordConfirm] = useState<String>("")
+    const navigate = useNavigate()
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
             const auth = getAuth(app);
             await createUserWithEmailAndPassword(auth, email, password);
-
+            navigate('/')
             toast.success("회원가입에 성공했습니다.")
+
         } catch (error: any) {
             console.log(error);
             toast.error(error?.code)
@@ -48,6 +50,8 @@ const SignupForm = () => {
             }
         }
         if (name === 'password_confirm') {
+            setPasswordConfirm(value);
+
             if (value?.length < 8) {
                 setError("비밀번호는 8자리 이상으로 입력해주세요")
             } else if (value !== password) {
