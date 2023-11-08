@@ -178,6 +178,9 @@ footer a:hover {
   padding: 20px 0px;
 }
 
+.post_text-pre-wrap {
+  white-space: pre-wrap;
+}
 
 /*profile*/
 .profile__box {
