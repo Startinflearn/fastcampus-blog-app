@@ -1,7 +1,7 @@
 import {Link} from "react-router-dom";
 
 import React, {useContext, useEffect, useState} from "react";
-import {collection, deleteDoc, doc, getDocs} from "firebase/firestore";
+import {collection, deleteDoc, doc, getDocs,query, orderBy} from "firebase/firestore";
 import {db} from "firebaseApp";
 import AuthContext from "context/AuthContext";
 import {toast} from "react-toastify";
@@ -40,8 +40,11 @@ export default function PostList({hasNavigation = true}: PostListProps) {
     }
 
     const getPosts = async () => {
-        const datas = await getDocs(collection(db, "posts"));
+
         setPosts([]);
+        let postsRef = collection(db,"posts");
+        let postQuery = query(postsRef, orderBy('createdAt','asc'));
+        const datas = await getDocs(postQuery);
         datas?.forEach((doc) => {
             const dataObj = {...doc.data(), id: doc.id}
             setPosts((prev) => [...prev, dataObj as PostProps])

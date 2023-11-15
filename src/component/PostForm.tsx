@@ -37,7 +37,11 @@ const PostForm = () => {
                     title: title,
                     summary: summary,
                     content: content,
-                    updateAt: new Date()?.toLocaleDateString(),
+                    updateAt: new Date()?.toLocaleDateString("ko",{
+                        hour : "2-digit",
+                        minute : "2-digit",
+                        second : "2-digit"
+                    }),
                 });
                 navigate(`posts/${post.id}`);
                 toast.success("게시글을 성공했습니다.")
@@ -47,7 +51,11 @@ const PostForm = () => {
                     title: title,
                     summary: summary,
                     content: content,
-                    createAt: new Date()?.toLocaleDateString(),
+                    createdAt: new Date()?.toLocaleDateString("ko",{
+                        hour : "2-digit",
+                        minute : "2-digit",
+                        second : "2-digit"
+                    }),
                     email: user?.email,
                     uid : user?.uid
                 })
