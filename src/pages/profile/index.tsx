@@ -8,7 +8,7 @@ export default function ProfilePage(){
     return <>
         <Header/>
         <Profile/>
-        <PostList hasNavigation={false}/>
+        <PostList hasNavigation={false} defaultTap="my"/>
         <Footer/>
         </>
 }
