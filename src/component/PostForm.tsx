@@ -4,7 +4,8 @@ import {db} from "firebaseApp"
 import AuthContext from "context/AuthContext";
 import {useNavigate, useParams} from "react-router-dom";
 import {toast} from "react-toastify";
-import {PostProps} from "component/PostList";
+import {CATEGORYS, CategoryType, PostProps} from "component/PostList";
+
 
 const PostForm = () => {
     const params = useParams();
@@ -13,6 +14,7 @@ const PostForm = () => {
     const [title, setTitle] = useState<string>('')
     const [summary, setSummary] = useState<string>('')
     const [content, setContent] = useState<string>('')
+    const [category, setCategory] = useState<CategoryType>('Frontend')
     const {user} = useContext(AuthContext);
     const navigate = useNavigate();
 
@@ -20,8 +22,6 @@ const PostForm = () => {
         if (id) {
             const docRef = doc(db, 'posts', id);
             const docSnap = await getDoc(docRef);
-
-
             setPost({id: docSnap.id, ...(docSnap.data() as PostProps)})
         }
     }
@@ -42,6 +42,7 @@ const PostForm = () => {
                         minute : "2-digit",
                         second : "2-digit"
                     }),
+                    category: category,
                 });
                 navigate(`posts/${post.id}`);
                 toast.success("게시글을 성공했습니다.")
@@ -57,7 +58,8 @@ const PostForm = () => {
                         second : "2-digit"
                     }),
                     email: user?.email,
-                    uid : user?.uid
+                    uid : user?.uid,
+                    category : category
                 })
                 navigate("/");
                 toast.success("게시글을 성공했습니다.")
@@ -68,7 +70,7 @@ const PostForm = () => {
             toast.error(e?.code)
         }
     }
-    const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const {target: {name, value}} = e
 
         if (name==='title'){
@@ -80,7 +82,9 @@ const PostForm = () => {
         if (name === 'content') {
             setContent(value)
         }
-
+        if (name === 'category') {
+            setCategory(value as CategoryType)
+        }
     }
     useEffect(() => {
         if (params?.id) getPost(params?.id);
@@ -92,6 +96,7 @@ const PostForm = () => {
             setTitle(post?.title);
             setSummary(post?.summary);
             setContent(post?.content);
+            setCategory(post?.category)
         }
     }, [post])
 
@@ -101,6 +106,16 @@ const PostForm = () => {
                 <label htmlFor="title">제목</label>
                 <input type="text" name="title" id="title" required onChange={onChange} value={title}/>
             </div>
+            <div className="form__block">
+                <label htmlFor="category">카테고리</label>
+                <select name="category" id="category" onChange={onChange} defaultValue={category}>
+                    <option value="">카테고리를 선택해주세요</option>
+                    {CATEGORYS?.map((category)=>(
+                        <option value={category} key={category}>{category}</option>
+                    ))}
+                </select>
+            </div>
+
             <div className="form__block">
                 <label htmlFor="summary">요약</label>
                 <input type="text" name="summary" id="summary" required onChange={onChange} value={summary}/>

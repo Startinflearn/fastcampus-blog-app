@@ -5,13 +5,13 @@ import {collection, deleteDoc, doc, getDocs,query, orderBy,where} from "firebase
 import {db} from "firebaseApp";
 import AuthContext from "context/AuthContext";
 import {toast} from "react-toastify";
+import {carryValue} from "@testing-library/user-event/dist/keyboard/shared";
 
 interface PostListProps {
     hasNavigation?: boolean,
-    defaultTap? : TabType
+    defaultTap?: TabType | CategoryType
 }
 
-type TabType = "all" | 'my'
 
 export interface PostProps {
     id?: string,
@@ -20,19 +20,25 @@ export interface PostProps {
     summary: string,
     content: string,
     createdAt: string,
-    updateAt : string,
-    uid :string
+    updateAt: string,
+    uid: string,
+    category: CategoryType
 }
 
-export default function PostList({hasNavigation = true,defaultTap = 'all'}: PostListProps) {
-    const [activeTab, setActiveTab] = useState<TabType>(defaultTap);
+
+type TabType = "all" | 'my'
+export type CategoryType = 'Frontend' | 'Backend' | 'Web' | 'Native';
+export const CATEGORYS: CategoryType[] = ["Frontend", "Backend", "Web", "Native"];
+
+export default function PostList({hasNavigation = true, defaultTap = 'all'}: PostListProps) {
+    const [activeTab, setActiveTab] = useState<TabType | CategoryType>(defaultTap);
     const [posts, setPosts] = useState<PostProps[]>([]);
     const {user} = useContext(AuthContext);
 
-    const handleDelete = async ( id: string) => {
+    const handleDelete = async (id: string) => {
 
         const confirm = window.confirm('해당 게시글을 삭제하시겠습니까?')
-        if(confirm && id){
+        if (confirm && id) {
             await deleteDoc(doc(db,"posts",id))
             toast.success('게시글을 삭제했습니다.')
             getPosts();
@@ -46,12 +52,15 @@ export default function PostList({hasNavigation = true,defaultTap = 'all'}: Post
         let postsRef = collection(db,"posts");
         let postQuery;
 
-        if(activeTab === 'my' && user){
+        if (activeTab === 'my' && user) {
             //나의 글만 필터링
-            postQuery = query(postsRef, where('uid','==',user?.uid), orderBy('createdAt','asc'))
-        }else {
+            postQuery = query(postsRef, where('uid', '==', user?.uid), orderBy('createdAt', 'asc'))
+        } else if (activeTab === "all") {
             //모든 글 보여주기
-            postQuery = query(postsRef, orderBy('createdAt','asc'));
+            postQuery = query(postsRef, orderBy('createdAt', 'asc'));
+        } else {
+            //모든 글 보여주기
+            postQuery = query(postsRef, where("category","==",activeTab),orderBy('createdAt', 'asc'));
         }
         const datas = await getDocs(postQuery);
         datas?.forEach((doc) => {
@@ -72,6 +81,11 @@ export default function PostList({hasNavigation = true,defaultTap = 'all'}: Post
                     <div role="presentation" className={activeTab === 'my' ? 'post__navigation--active' : ""}
                          onClick={() => setActiveTab("my")}>나의글
                     </div>
+                    {CATEGORYS?.map((category) => (
+                        <div role="presentation" className={activeTab === category ? 'post__navigation--active' : ""}
+                             onClick={() => setActiveTab(category)} key={category}>{category}
+                        </div>
+                    ))}
                 </div>
             )
         }
