@@ -86,10 +86,11 @@ const Comments = ({post} : CommentsProps) => {
                     <label htmlFor="comment">댓글입력</label>
                     <textarea name="comment" id="comment" required value={comment} onChange={onChange}/>
                 </div>
+                <div className="form__block form__block-reverse">
+                    <input type="submit" value="입력" className="form__btn--submit"/>
+                </div>
             </form>
-            <div className="form__block form__block-reverse">
-                <input type="submit" value="입력" className="form__btn--submit"/>
-            </div>
+
             <div className="comments__list">
                 {COMENTS?.map((comment) => (
                     <div key={comment.id} className="comment__box">
