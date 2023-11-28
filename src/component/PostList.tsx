@@ -12,7 +12,13 @@ interface PostListProps {
     defaultTap?: TabType | CategoryType
 }
 
+export interface CommentsInterface {
+    content : string,
+    uid : string,
+    email : string,
+    createAt : string
 
+}
 export interface PostProps {
     id?: string,
     title: string,
@@ -22,7 +28,8 @@ export interface PostProps {
     createdAt: string,
     updateAt: string,
     uid: string,
-    category: CategoryType
+    category: CategoryType,
+    comments?: CommentsInterface[];
 }
 
 

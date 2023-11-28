@@ -5,42 +5,17 @@ import {db} from "firebaseApp";
 import AuthContext from "context/AuthContext";
 import {toast} from "react-toastify";
 
-const COMENTS = [
-    {
-        id: 1,
-        email : 'test@test.com',
-        content : "댓글입니다1",
-        createAt : "2023-07-13"
-    },
-    {
-        id: 2,
-        email : 'test@test2.com',
-        content : "댓글입니다2",
-        createAt : "2023-07-14"
-    },
-    {
-        id: 3,
-        email : 'test@test3.com',
-        content : "댓글입니다3",
-        createAt : "2023-07-15"
-    },
-    {
-        id: 4,
-        email : 'test@test4.com',
-        content : "댓글입니다4",
-        createAt : "2023-07-17"
-    },
-]
-
 interface CommentsProps {
     post :PostProps
+    getPost : (id:string)=> Promise<void>;
 }
-const Comments = ({post} : CommentsProps) => {
+const Comments = ({post,getPost} : CommentsProps) => {
     const [comment, setComment] = useState<string>("")
     const {user} =useContext(AuthContext)
+
+
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log('test')
         try {
             if(post && post?.id){
                 const postRef = doc(db,"posts",post.id)
@@ -63,7 +38,9 @@ const Comments = ({post} : CommentsProps) => {
                             minute : "2-digit",
                             second : "2-digit"
                         }),
-                    })
+                    });
+                    //문서 업데이트
+                    await getPost(post?.id);
                 }
             }
             toast.success("댓글을 생성했습니다.")
@@ -92,8 +69,8 @@ const Comments = ({post} : CommentsProps) => {
             </form>
 
             <div className="comments__list">
-                {COMENTS?.map((comment) => (
-                    <div key={comment.id} className="comment__box">
+                {post?.comments?.slice(0).reverse().map((comment) => (
+                    <div key={comment.createAt} className="comment__box">
                         <div className="comment__profile-box">
                             <div className="comment__email">{comment?.email}</div>
                             <div className="comment__date">{comment?.createAt}</div>
